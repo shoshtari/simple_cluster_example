@@ -3,10 +3,12 @@ package main
 import (
 	"context"
 	"fmt"
-	"google.golang.org/grpc"
+	redisTools "keycluster/internal/redis"
 	"log"
 	"net"
 	"strconv"
+
+	"google.golang.org/grpc"
 
 	pb "keycluster/proto"
 )
@@ -33,6 +35,8 @@ func (s server) Get(ctx context.Context, request *pb.GetRequest) (*pb.GetRespons
 
 func main() {
 	const PORT = 50051
+	var nodeID = redisTools.RegisterNode()
+	data["node_id"] = strconv.Itoa(nodeID)
 
 	lis, err := net.Listen("tcp", "0.0.0.0:"+strconv.Itoa(PORT))
 	if err != nil {
@@ -40,8 +44,8 @@ func main() {
 	}
 
 	s := grpc.NewServer()
-	pb.RegisterBrokerServer(s, &server{})
 
+	pb.RegisterBrokerServer(s, &server{})
 	log.Println("starting server on port " + strconv.Itoa(PORT))
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("error on serving: %v\n", err)

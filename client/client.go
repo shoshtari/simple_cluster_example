@@ -2,10 +2,12 @@ package main
 
 import (
 	"context"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
+	"fmt"
 	pb "keycluster/proto"
 	"log"
+
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 var c pb.BrokerClient
@@ -30,10 +32,6 @@ func main() {
 
 	c = pb.NewBrokerClient(conn)
 
-	put("key1", "value1")
-	put("key2", "value2")
-	get("key1")
-	if _, err := get("key3"); err == nil {
-		log.Fatalf("key3 should not exist\n")
-	}
+	val, _ := get("node_id")
+	fmt.Println(val)
 }
