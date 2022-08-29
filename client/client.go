@@ -24,7 +24,7 @@ func get(key string) (string, error) {
 }
 
 func main() {
-	url := "localhost:50051"
+	url := "192.168.59.102:30005"
 	conn, err := grpc.Dial(url, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v\n", err)

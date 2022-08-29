@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: keycluster
+  name: keycluster
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      io.kompose.service: keycluster
+  template:
+    metadata:
+      labels:
+        io.kompose.service: keycluster
+    spec:
+      containers:
+        - args:
+            - app
+          image: keycluster
+          imagePullPolicy: Never
+          name: keycluster
+          ports:
+            - containerPort: 50051
+            - containerPort: 2112
+          resources:
+            limits:
+              cpu: 100m
+              memory: 100Mi
+            requests:
+              cpu: 100m
+              memory: 100Mi
+      restartPolicy: Always
+status: {}

@@ -24,6 +24,20 @@ func init() {
 		PoolTimeout: PoolTimeout,
 		PoolSize:    PoolSize,
 	})
+	
+	ctx := context.Background()
+	err := nodeSpace.Ping(ctx).Err()
+	ticker := time.NewTicker(time.Minute)
+
+	for err!=nil{
+		select{
+		case <-ticker.C:
+			log.Fatalf("Coudn't connect to redis db")
+		case <-time.After(time.Second):
+			err = nodeSpace.Ping(ctx).Err()
+			log.Println("waiting for redis")
+		}
+	}
 
 }
 var mainCtx = context.Background() 

@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    io.kompose.service: keycluster
+  name: keycluster
+spec:
+  type: NodePort
+  
+
+  ports:
+    - name: keycluster-port
+      targetPort: 50051
+      port: 50051
+      nodePort: 30005
+      protocol: TCP
+    - name: http-web
+      port: 80
+      protocol: TCP
+      targetPort: 2112
+  selector:
+    io.kompose.service: keycluster

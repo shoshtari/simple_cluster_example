@@ -1,4 +1,4 @@
-package main
+package server
 
 import (
 	"context"
@@ -33,9 +33,15 @@ func (s server) Get(ctx context.Context, request *pb.GetRequest) (*pb.GetRespons
 	return &pb.GetResponse{Value: ""}, fmt.Errorf("key %s not found", key)
 }
 
-func main() {
-	const PORT = 50051
+func Run() {
+	
 	var nodeID = redisTools.RegisterNode()
+	var PORT int
+	if nodeID==1{
+		PORT = 50051
+	} else{
+		PORT = 50052
+	}
 	data["node_id"] = strconv.Itoa(nodeID)
 
 	lis, err := net.Listen("tcp", "0.0.0.0:"+strconv.Itoa(PORT))
@@ -50,4 +56,5 @@ func main() {
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("error on serving: %v\n", err)
 	}
+
 }
